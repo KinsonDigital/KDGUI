@@ -23,8 +23,6 @@ internal sealed class ControlGroup : IControlGroup
     private readonly IImGuiInvoker imGuiInvoker;
     private readonly IPushReactable renderReactable;
     private readonly string pushId;
-    private bool shouldSetPos = true;
-    private bool shouldSetSize = true;
     private Point position;
     private Size size = new (32, 32);
     private Size prevSize;
