@@ -19,7 +19,7 @@ internal sealed class UpDown : Control, IUpDown
 {
     private readonly string upId = Guid.NewGuid().ToString();
     private readonly string downId = Guid.NewGuid().ToString();
-    private string text = "ButtonRepeat";
+    private string text = "UpDown";
 
     /// <summary>
     /// Initializes a new instance of the <see cref="UpDown"/> class.
