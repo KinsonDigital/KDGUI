@@ -63,9 +63,7 @@ internal abstract class Control : IControl
     /// <inheritdoc/>
     public Point Position { get; set; }
 
-    /// <summary>
-    /// Gets or sets the width of the control.
-    /// </summary>
+    /// <inheritdoc/>
     public virtual int Width { get; set; }
 
     /// <inheritdoc/>
