@@ -54,7 +54,7 @@ internal sealed class ComboBox : Control, IComboBox
     }
 
     /// <inheritdoc/>
-    public string Label { get; set; } = "ComboBox";
+    public string Label { get; set; } = "ComboBox:";
 
     /// <inheritdoc cref="IComboBox"/>
     public override int Width { get; set; } = 200;
