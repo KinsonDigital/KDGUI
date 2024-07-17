@@ -189,8 +189,6 @@ internal sealed class ControlGroup : IControlGroup
             this.isInitialized = true;
         }
 
-        this.autoFitSize = this.imGuiInvoker.GetWindowSize().ToSize();
-
         this.imGuiInvoker.End();
 
         this.prevSize = this.size;
