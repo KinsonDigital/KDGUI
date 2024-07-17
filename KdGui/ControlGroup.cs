@@ -29,12 +29,9 @@ internal sealed class ControlGroup : IControlGroup
     private Size size = new (32, 32);
     private Size prevSize;
     private bool isDisposed;
-    private bool autoSizeToFitContent;
-    private bool titleBarVisible = true;
     private bool isBeingDragged;
     private int invokeCount;
     private bool isInitialized;
-    private bool visible = true;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ControlGroup"/> class.
@@ -68,33 +65,21 @@ internal sealed class ControlGroup : IControlGroup
     public Point Position
     {
         get => this.position;
-        set
-        {
-            this.position = value;
-            this.shouldSetPos = true;
-        }
+        set => this.position = value;
     }
 
     /// <inheritdoc/>
     public int Width
     {
         get => this.size.Width;
-        set
-        {
-            this.size = this.size with { Width = value };
-            this.shouldSetSize = true;
-        }
+        set => this.size = this.size with { Width = value };
     }
 
     /// <inheritdoc/>
     public int Height
     {
         get => this.size.Height;
-        set
-        {
-            this.size = this.size with { Height = value };
-            this.shouldSetSize = true;
-        }
+        set => this.size = this.size with { Height = value };
     }
 
     /// <inheritdoc/>
@@ -116,40 +101,16 @@ internal sealed class ControlGroup : IControlGroup
     public int Bottom => this.position.Y + this.size.Height;
 
     /// <inheritdoc/>
-    public bool TitleBarVisible
-    {
-        get => this.titleBarVisible;
-        set
-        {
-            this.titleBarVisible = value;
-            this.shouldSetSize = true;
-        }
-    }
+    public bool TitleBarVisible { get; set; } = true;
 
     /// <inheritdoc/>
-    public bool AutoSizeToFitContent
-    {
-        get => this.autoSizeToFitContent;
-        set
-        {
-            this.autoSizeToFitContent = value;
-            this.shouldSetSize = true;
-        }
-    }
+    public bool AutoSizeToFitContent { get; set; }
 
     /// <inheritdoc/>
     public bool NoResize { get; set; }
 
     /// <inheritdoc/>
-    public bool Visible
-    {
-        get => this.visible;
-        set
-        {
-            this.visible = value;
-            this.shouldSetSize = true;
-        }
-    }
+    public bool Visible { get; set; } = true;
 
     /// <inheritdoc/>
     public void Add(IControl control)
@@ -260,7 +221,7 @@ internal sealed class ControlGroup : IControlGroup
     {
         var flags = ImGuiWindowFlags.None;
 
-        flags = this.titleBarVisible ? flags : flags | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoMove;
+        flags = TitleBarVisible ? flags : flags | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoMove;
         flags = AutoSizeToFitContent ? flags | ImGuiWindowFlags.AlwaysAutoResize : flags;
         flags = NoResize ? flags | ImGuiWindowFlags.NoResize : flags;
         flags = Visible ? flags : flags | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoBackground;
