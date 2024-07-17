@@ -39,17 +39,13 @@ public class Main : Window
         this.ctrlGroup.NoResize = true;
         this.ctrlGroup.TitleBarVisible = false;
         this.ctrlGroup.AutoSizeToFitContent = true;
-        this.ctrlGroup.Initialized += (_, _) =>
-        {
-            this.ctrlGroup.Position = new Point(
-                (int)Width - (this.ctrlGroup.Width + 10),
-                (int)Height - (this.ctrlGroup.Height + 10));
-        };
 
-        var allControlsScene = new AllControlsScene();
         var buttonScene = new ButtonScene();
+        var relativePosScene = new RelativePositioningScene();
+        var allControlsScene = new AllControlsScene();
 
         SceneManager.AddScene(buttonScene, true);
+        SceneManager.AddScene(relativePosScene);
         SceneManager.AddScene(allControlsScene);
 
         base.OnLoad();
@@ -66,6 +62,10 @@ public class Main : Window
     protected override void OnUpdate(FrameTime frameTime)
     {
         Title = SceneManager.CurrentScene.Name;
+
+        this.ctrlGroup.Position = new Point(
+            (int)Width - (this.ctrlGroup.Width + 10),
+            (int)Height - (this.ctrlGroup.Height + 10));
 
         base.OnUpdate(frameTime);
     }
