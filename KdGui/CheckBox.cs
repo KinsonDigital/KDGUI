@@ -38,7 +38,11 @@ internal sealed class CheckBox : Control, ICheckBox
     public string LabelWhenUnchecked { get; set; } = "Unchecked";
 
     /// <inheritdoc/>
-    public bool IsChecked => this.isChecked;
+    public bool IsChecked
+    {
+        get => this.isChecked;
+        set => this.isChecked = value;
+    }
 
     /// <inheritdoc/>
     protected override void Dispose(bool disposing)
