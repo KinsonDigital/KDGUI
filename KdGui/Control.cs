@@ -25,6 +25,9 @@ internal abstract class Control : IControl
     /// <param name="renderReactable">Manages render notifications.</param>
     protected Control(IImGuiInvoker imGuiInvoker, IPushReactable renderReactable)
     {
+        ArgumentNullException.ThrowIfNull(imGuiInvoker);
+        ArgumentNullException.ThrowIfNull(renderReactable);
+
         ImGuiInvoker = imGuiInvoker;
         this.renderReactable = renderReactable;
     }
