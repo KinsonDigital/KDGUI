@@ -65,13 +65,6 @@ internal sealed class ComboBox : Control, IComboBox
     public List<string> Items { get; set; } = new ();
 
     /// <inheritdoc/>
-    protected override void Dispose(bool disposing)
-    {
-        this.SelectedItemIndexChanged = null;
-        base.Dispose(disposing);
-    }
-
-    /// <inheritdoc/>
     [SuppressMessage("csharpsquid", "S3776", Justification = "Do not care about cognitive complexity.")]
     protected override void Render()
     {
@@ -155,6 +148,13 @@ internal sealed class ComboBox : Control, IComboBox
         }
 
         ImGuiInvoker.PopID();
+    }
+
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
+    {
+        this.SelectedItemIndexChanged = null;
+        base.Dispose(disposing);
     }
 
     /// <summary>

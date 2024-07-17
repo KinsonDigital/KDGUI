@@ -45,13 +45,6 @@ internal sealed class CheckBox : Control, ICheckBox
     }
 
     /// <inheritdoc/>
-    protected override void Dispose(bool disposing)
-    {
-        this.CheckedChanged = null;
-        base.Dispose(disposing);
-    }
-
-    /// <inheritdoc/>
     protected override void Render()
     {
         if (!Visible)
@@ -72,6 +65,13 @@ internal sealed class CheckBox : Control, ICheckBox
 
         Width = (int)GetWidth(this.isChecked ? LabelWhenChecked : LabelWhenUnchecked);
         Height = (int)ImGuiInvoker.GetFrameHeightWithSpacing();
+    }
+
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
+    {
+        this.CheckedChanged = null;
+        base.Dispose(disposing);
     }
 
     /// <summary>

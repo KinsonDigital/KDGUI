@@ -42,16 +42,6 @@ internal sealed class Button : Control, IButton
     /// <inheritdoc/>
     public string Text { get; set; }
 
-    /// <inheritdoc/>
-    protected override void Dispose(bool disposing)
-    {
-        this.Click = null;
-        this.MousePressed = null;
-        this.MouseReleased = null;
-
-        base.Dispose(disposing);
-    }
-
     /// <inheritdoc cref="Control"/>
     protected override void Render()
     {
@@ -73,6 +63,16 @@ internal sealed class Button : Control, IButton
         ImGuiInvoker.PopID();
 
         ProcessMouseEvents();
+    }
+
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
+    {
+        this.Click = null;
+        this.MousePressed = null;
+        this.MouseReleased = null;
+
+        base.Dispose(disposing);
     }
 
     /// <summary>
