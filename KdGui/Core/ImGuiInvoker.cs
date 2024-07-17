@@ -134,6 +134,18 @@ internal sealed class ImGuiInvoker : IImGuiInvoker
     public void SetNextItemWidth(float item_width) => ImGui.SetNextItemWidth(item_width);
 
     /// <inheritdoc/>
+    public void PushItemWidth(float width) => ImGui.PushItemWidth(width);
+
+    /// <inheritdoc/>
+    public void PopItemWidth() => ImGui.PopItemWidth();
+
+    /// <inheritdoc/>
+    public void SetNextWindowSize(Vector2 size) => ImGui.SetNextWindowSize(size);
+
+    /// <inheritdoc/>
+    public void SetNextWindowPos(Vector2 pos) => ImGui.SetNextWindowPos(pos);
+
+    /// <inheritdoc/>
     public void SetWindowPos(Vector2 pos) => ImGui.SetWindowPos(pos);
 
     /// <inheritdoc/>
@@ -150,4 +162,7 @@ internal sealed class ImGuiInvoker : IImGuiInvoker
 
     /// <inheritdoc/>
     public bool IsMouseDragging(ImGuiMouseButton button) => ImGui.IsMouseDragging(button);
+
+    /// <inheritdoc/>
+    public void Dummy(Vector2 size) => ImGui.Dummy(size);
 }
