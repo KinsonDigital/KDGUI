@@ -26,7 +26,7 @@ internal sealed class ControlGroup : IControlGroup
     private bool shouldSetPos = true;
     private bool shouldSetSize = true;
     private Point position;
-    private Size size;
+    private Size size = new (32, 32);
     private Size prevSize;
     private bool isDisposed;
     private bool autoSizeToFitContent;
@@ -181,27 +181,26 @@ internal sealed class ControlGroup : IControlGroup
         this.imGuiInvoker.PushID(this.pushId);
 
         PushWindowStyles();
+
+        if (!AutoSizeToFitContent)
+        {
+            this.imGuiInvoker.SetNextWindowSize(AutoSizeToFitContent ? Vector2.Zero : this.size.ToVector2());
+        }
+
+        if (!this.isBeingDragged)
+        {
+            this.imGuiInvoker.SetNextWindowPos(this.position.ToVector2());
+        }
+
         this.imGuiInvoker.Begin(Title, flags);
+
+        this.size = this.imGuiInvoker.GetWindowSize().ToSize();
 
         if (AutoSizeToFitContent && TitleBarVisible)
         {
             var titleWidth = this.imGuiInvoker.CalcTextSize(Title).X + CollapseButtonWidth;
 
             this.imGuiInvoker.InvisibleButton($"##title_width {Title}", new Vector2(titleWidth, 0));
-        }
-
-        // Update the position of the window as long as the window is not being dragged
-        if (this.shouldSetPos && !this.isBeingDragged)
-        {
-            this.imGuiInvoker.SetWindowPos(this.position.ToVector2());
-            this.shouldSetPos = false;
-        }
-
-        if (this.shouldSetSize)
-        {
-            // Setting the window size to 0,0 will have ImGui auto size the window to fit the content
-            this.imGuiInvoker.SetWindowSize(AutoSizeToFitContent ? Vector2.Zero : this.size.ToVector2());
-            this.shouldSetSize = false;
         }
 
         PopWindowStyles();
@@ -212,8 +211,6 @@ internal sealed class ControlGroup : IControlGroup
         {
             this.renderReactable.Push(Id);
         }
-
-        this.size = this.imGuiInvoker.GetWindowSize().ToSize();
 
         if (this.size != this.prevSize)
         {
@@ -236,6 +233,7 @@ internal sealed class ControlGroup : IControlGroup
         }
 
         this.invokeCount += 1;
+        this.autoFitSize = this.imGuiInvoker.GetWindowSize().ToSize();
 
         this.imGuiInvoker.End();
 
