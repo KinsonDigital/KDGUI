@@ -54,7 +54,7 @@ internal sealed class ComboBox : Control, IComboBox
     }
 
     /// <inheritdoc/>
-    public string Label { get; set; } = "ComboBox";
+    public string Label { get; set; } = "ComboBox:";
 
     /// <inheritdoc cref="IComboBox"/>
     public override int Width { get; set; } = 200;
@@ -88,13 +88,11 @@ internal sealed class ComboBox : Control, IComboBox
         // Bump the label down to be vertically centered with the combo box
         ImGuiInvoker.SetCursorPos(currentPos with { Y = currentPos.Y + 5 });
 
-        var label = Label.EndsWith(':') ? Label : $"{Label}:";
-
         var textColor = Enabled ? Color.White : Color.DarkGray;
 
         ImGuiInvoker.PushID(this.textId);
         ImGuiInvoker.PushStyleColor(ImGuiCol.Text, textColor);
-        ImGuiInvoker.Text(label);
+        ImGuiInvoker.Text(Label);
         ImGuiInvoker.PopStyleColor(1);
         ImGuiInvoker.PopID();
 
