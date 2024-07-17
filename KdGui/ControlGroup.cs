@@ -17,7 +17,6 @@ using ImGuiNET;
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global", Justification = "Instantiated via IoC container.")]
 internal sealed class ControlGroup : IControlGroup
 {
-    private const int PreRenderCount = 5;
     private const float CollapseButtonWidth = 28f;
     private readonly List<IControl> controls = [];
     private readonly IImGuiInvoker imGuiInvoker;
@@ -28,7 +27,6 @@ internal sealed class ControlGroup : IControlGroup
     private Size prevSize;
     private bool isDisposed;
     private bool isBeingDragged;
-    private int invokeCount;
     private bool isInitialized;
 
     /// <summary>
@@ -185,25 +183,15 @@ internal sealed class ControlGroup : IControlGroup
             this.position = this.imGuiInvoker.GetWindowPos().ToPoint();
         }
 
-        if (!this.isInitialized && this.invokeCount >= PreRenderCount)
+        if (!this.isInitialized)
         {
             this.Initialized?.Invoke(this, EventArgs.Empty);
             this.isInitialized = true;
         }
 
-        this.invokeCount += 1;
         this.autoFitSize = this.imGuiInvoker.GetWindowSize().ToSize();
 
         this.imGuiInvoker.End();
-
-        // NOTE: Then a KdGui control is rendered for the very first time, it is rendered 5 times.
-        // This is to ensure that certain ImGui functions and state is established.  Things such as
-        // size calculations and more are only done on the first render, so these numbers are not
-        // available or accurate until ta few renders are complete.
-        if (this.invokeCount < PreRenderCount)
-        {
-            Render();
-        }
 
         this.prevSize = this.size;
     }
