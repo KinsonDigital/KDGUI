@@ -68,9 +68,17 @@ internal sealed class Button : Control, IButton
     /// <inheritdoc/>
     protected override void Dispose(bool disposing)
     {
-        this.Click = null;
-        this.MousePressed = null;
-        this.MouseReleased = null;
+        if (IsDisposed)
+        {
+            return;
+        }
+
+        if (disposing)
+        {
+            this.Click = null;
+            this.MousePressed = null;
+            this.MouseReleased = null;
+        }
 
         base.Dispose(disposing);
     }
