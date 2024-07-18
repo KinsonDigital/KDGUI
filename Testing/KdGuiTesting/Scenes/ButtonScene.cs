@@ -24,6 +24,9 @@ public class ButtonScene : SceneBase
         this.ctrlFactory = new ControlFactory();
     }
 
+    /// <summary>
+    /// Loads the content for the scene.
+    /// </summary>
     public override void LoadContent()
     {
         this.button = this.ctrlFactory.CreateButton();
@@ -40,6 +43,9 @@ public class ButtonScene : SceneBase
         base.LoadContent();
     }
 
+    /// <summary>
+    /// Renders the scene.
+    /// </summary>
     public override void Render()
     {
         this.ctrlGroup.Render();

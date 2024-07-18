@@ -38,13 +38,10 @@ internal sealed class CheckBox : Control, ICheckBox
     public string LabelWhenUnchecked { get; set; } = "Unchecked";
 
     /// <inheritdoc/>
-    public bool IsChecked => this.isChecked;
-
-    /// <inheritdoc/>
-    protected override void Dispose(bool disposing)
+    public bool IsChecked
     {
-        this.CheckedChanged = null;
-        base.Dispose(disposing);
+        get => this.isChecked;
+        set => this.isChecked = value;
     }
 
     /// <inheritdoc/>
@@ -68,6 +65,13 @@ internal sealed class CheckBox : Control, ICheckBox
 
         Width = (int)GetWidth(this.isChecked ? LabelWhenChecked : LabelWhenUnchecked);
         Height = (int)ImGuiInvoker.GetFrameHeightWithSpacing();
+    }
+
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
+    {
+        this.CheckedChanged = null;
+        base.Dispose(disposing);
     }
 
     /// <summary>

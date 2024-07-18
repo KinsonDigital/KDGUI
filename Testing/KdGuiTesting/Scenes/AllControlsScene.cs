@@ -31,6 +31,9 @@ public class AllControlsScene : SceneBase
         this.ctrlFactory = new ControlFactory();
     }
 
+    /// <summary>
+    /// Loads the content for the scene.
+    /// </summary>
     public override void LoadContent()
     {
         this.ctrlGroup = this.ctrlFactory.CreateControlGroup();
@@ -72,6 +75,9 @@ public class AllControlsScene : SceneBase
         base.LoadContent();
     }
 
+    /// <summary>
+    /// Renders the scene.
+    /// </summary>
     public override void Render()
     {
         this.ctrlGroup.Render();

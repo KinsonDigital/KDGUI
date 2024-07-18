@@ -17,24 +17,17 @@ using ImGuiNET;
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global", Justification = "Instantiated via IoC container.")]
 internal sealed class ControlGroup : IControlGroup
 {
-    private const int PreRenderCount = 5;
     private const float CollapseButtonWidth = 28f;
     private readonly List<IControl> controls = [];
     private readonly IImGuiInvoker imGuiInvoker;
     private readonly IPushReactable renderReactable;
     private readonly string pushId;
-    private bool shouldSetPos = true;
-    private bool shouldSetSize = true;
     private Point position;
-    private Size size;
+    private Size size = new (32, 32);
     private Size prevSize;
     private bool isDisposed;
-    private bool autoSizeToFitContent;
-    private bool titleBarVisible = true;
     private bool isBeingDragged;
-    private int invokeCount;
     private bool isInitialized;
-    private bool visible = true;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ControlGroup"/> class.
@@ -68,33 +61,21 @@ internal sealed class ControlGroup : IControlGroup
     public Point Position
     {
         get => this.position;
-        set
-        {
-            this.position = value;
-            this.shouldSetPos = true;
-        }
+        set => this.position = value;
     }
 
     /// <inheritdoc/>
     public int Width
     {
         get => this.size.Width;
-        set
-        {
-            this.size = this.size with { Width = value };
-            this.shouldSetSize = true;
-        }
+        set => this.size = this.size with { Width = value };
     }
 
     /// <inheritdoc/>
     public int Height
     {
         get => this.size.Height;
-        set
-        {
-            this.size = this.size with { Height = value };
-            this.shouldSetSize = true;
-        }
+        set => this.size = this.size with { Height = value };
     }
 
     /// <inheritdoc/>
@@ -116,40 +97,16 @@ internal sealed class ControlGroup : IControlGroup
     public int Bottom => this.position.Y + this.size.Height;
 
     /// <inheritdoc/>
-    public bool TitleBarVisible
-    {
-        get => this.titleBarVisible;
-        set
-        {
-            this.titleBarVisible = value;
-            this.shouldSetSize = true;
-        }
-    }
+    public bool TitleBarVisible { get; set; } = true;
 
     /// <inheritdoc/>
-    public bool AutoSizeToFitContent
-    {
-        get => this.autoSizeToFitContent;
-        set
-        {
-            this.autoSizeToFitContent = value;
-            this.shouldSetSize = true;
-        }
-    }
+    public bool AutoSizeToFitContent { get; set; }
 
     /// <inheritdoc/>
     public bool NoResize { get; set; }
 
     /// <inheritdoc/>
-    public bool Visible
-    {
-        get => this.visible;
-        set
-        {
-            this.visible = value;
-            this.shouldSetSize = true;
-        }
-    }
+    public bool Visible { get; set; } = true;
 
     /// <inheritdoc/>
     public void Add(IControl control)
@@ -181,27 +138,26 @@ internal sealed class ControlGroup : IControlGroup
         this.imGuiInvoker.PushID(this.pushId);
 
         PushWindowStyles();
+
+        if (!AutoSizeToFitContent)
+        {
+            this.imGuiInvoker.SetNextWindowSize(AutoSizeToFitContent ? Vector2.Zero : this.size.ToVector2());
+        }
+
+        if (!this.isBeingDragged)
+        {
+            this.imGuiInvoker.SetNextWindowPos(this.position.ToVector2());
+        }
+
         this.imGuiInvoker.Begin(Title, flags);
+
+        this.size = this.imGuiInvoker.GetWindowSize().ToSize();
 
         if (AutoSizeToFitContent && TitleBarVisible)
         {
             var titleWidth = this.imGuiInvoker.CalcTextSize(Title).X + CollapseButtonWidth;
 
             this.imGuiInvoker.InvisibleButton($"##title_width {Title}", new Vector2(titleWidth, 0));
-        }
-
-        // Update the position of the window as long as the window is not being dragged
-        if (this.shouldSetPos && !this.isBeingDragged)
-        {
-            this.imGuiInvoker.SetWindowPos(this.position.ToVector2());
-            this.shouldSetPos = false;
-        }
-
-        if (this.shouldSetSize)
-        {
-            // Setting the window size to 0,0 will have ImGui auto size the window to fit the content
-            this.imGuiInvoker.SetWindowSize(AutoSizeToFitContent ? Vector2.Zero : this.size.ToVector2());
-            this.shouldSetSize = false;
         }
 
         PopWindowStyles();
@@ -212,8 +168,6 @@ internal sealed class ControlGroup : IControlGroup
         {
             this.renderReactable.Push(Id);
         }
-
-        this.size = this.imGuiInvoker.GetWindowSize().ToSize();
 
         if (this.size != this.prevSize)
         {
@@ -229,24 +183,13 @@ internal sealed class ControlGroup : IControlGroup
             this.position = this.imGuiInvoker.GetWindowPos().ToPoint();
         }
 
-        if (!this.isInitialized && this.invokeCount >= PreRenderCount)
+        if (!this.isInitialized)
         {
             this.Initialized?.Invoke(this, EventArgs.Empty);
             this.isInitialized = true;
         }
 
-        this.invokeCount += 1;
-
         this.imGuiInvoker.End();
-
-        // NOTE: Then a KdGui control is rendered for the very first time, it is rendered 5 times.
-        // This is to ensure that certain ImGui functions and state is established.  Things such as
-        // size calculations and more are only done on the first render, so these numbers are not
-        // available or accurate until ta few renders are complete.
-        if (this.invokeCount < PreRenderCount)
-        {
-            Render();
-        }
 
         this.prevSize = this.size;
     }
@@ -262,7 +205,7 @@ internal sealed class ControlGroup : IControlGroup
     {
         var flags = ImGuiWindowFlags.None;
 
-        flags = this.titleBarVisible ? flags : flags | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoMove;
+        flags = TitleBarVisible ? flags : flags | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoMove;
         flags = AutoSizeToFitContent ? flags | ImGuiWindowFlags.AlwaysAutoResize : flags;
         flags = NoResize ? flags | ImGuiWindowFlags.NoResize : flags;
         flags = Visible ? flags : flags | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoBackground;

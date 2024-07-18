@@ -303,10 +303,33 @@ public interface IImGuiInvoker
     void SetNextItemWidth(float item_width);
 
     /// <summary>
+    /// Sets the width of the next item.
+    /// </summary>
+    /// <param name="width">The width.</param>
+    void PushItemWidth(float width);
+
+    /// <summary>
+    /// Resets the item width.
+    /// </summary>
+    void PopItemWidth();
+
+    /// <summary>
     /// Sets the position of the window.
     /// </summary>
     /// <param name="pos">The position.</param>
     void SetWindowPos(Vector2 pos);
+
+    /// <summary>
+    /// Sets the size of the next window.
+    /// </summary>
+    /// <param name="size">The window size.</param>
+    void SetNextWindowSize(Vector2 size);
+
+    /// <summary>
+    /// Sets the position of the next window.
+    /// </summary>
+    /// <param name="pos">The position.</param>
+    void SetNextWindowPos(Vector2 pos);
 
     /// <summary>
     /// Sets the size of the window.
@@ -344,4 +367,10 @@ public interface IImGuiInvoker
     /// <param name="button">The mouse button.</param>
     /// <returns>True if the window is being dragged.</returns>
     bool IsMouseDragging(ImGuiMouseButton button);
+
+    /// <summary>
+    /// Provides spacing of an area.
+    /// </summary>
+    /// <param name="size">The size of the space.</param>
+    void Dummy(Vector2 size);
 }
