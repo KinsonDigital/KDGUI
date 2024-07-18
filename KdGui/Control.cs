@@ -16,7 +16,6 @@ internal abstract class Control : IControl
     private readonly IPushReactable renderReactable;
     private IDisposable? unsubscriber;
     private Guid windowOwnerId;
-    private bool isDisposed;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Control"/> class.
@@ -79,6 +78,11 @@ internal abstract class Control : IControl
     public bool Visible { get; set; } = true;
 
     /// <summary>
+    /// Gets a value indicating whether if the control has been disposed of.
+    /// </summary>
+    protected bool IsDisposed { get; private set; }
+
+    /// <summary>
     /// Gets the ImGui invoker.
     /// </summary>
     protected IImGuiInvoker ImGuiInvoker { get; private set; }
@@ -100,11 +104,11 @@ internal abstract class Control : IControl
     // ReSharper disable once VirtualMemberNeverOverridden.Global
     protected virtual void Dispose(bool disposing)
     {
-        if (this.isDisposed)
+        if (IsDisposed)
         {
             return;
         }
 
-        this.isDisposed = true;
+        IsDisposed = true;
     }
 }
