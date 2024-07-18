@@ -11,14 +11,19 @@ As with all software, there is always a chance for issues and bugs, especially f
 
 <h2 align="center" style="font-weight: bold;">Enhancements 💎</h2>
 
-1. [#21](https://github.com/KinsonDigital/KdGui/issues/21) - Improved positioning and sizing.
-2. [#17](https://github.com/KinsonDigital/KdGui/issues/17) - Enhance checkbox IsChecked property.
-3. [#16](https://github.com/KinsonDigital/KdGui/issues/16) - Remove colon from text for controls.
+1. [#21](https://github.com/KinsonDigital/KdGui/issues/21) - Improved the positioning and sizing of `ControlGroup` controls.
+2. [#17](https://github.com/KinsonDigital/KdGui/issues/17) - Enhanced the `CheckBox.IsChecked` property by adding a property setter to allow users to programmatically set the check box state.
+3. [#16](https://github.com/KinsonDigital/KdGui/issues/16) - Removed the colon from text for controls to give users more control.
 
 <h2 align="center" style="font-weight: bold;">Breaking Changes 🧨</h2>
 
-1. [#16](https://github.com/KinsonDigital/KdGui/issues/16) - Remove colon from text for controls.
+1. [#16](https://github.com/KinsonDigital/KdGui/issues/16) - Removed the colon from the default `Label` property value for the `ComboBox` control.
+2. [#16](https://github.com/KinsonDigital/KdGui/issues/16) - Changed the `ComboBox` label from being automatically prefixed with a colon.
+3. [#16](https://github.com/KinsonDigital/KdGui/issues/16) - Removed the colon from the default `Text` property value for the `ComboBox` control.
+4. [#16](https://github.com/KinsonDigital/KdGui/issues/16) - Changed the `UpDown` text from being automatically prefixed with a colon.
 
-<h2 align="center" style="font-weight: bold;">Other 🪧</h2>
+<h2 align="center" style="font-weight: bold;">Dependency Updates 📦</h2>
 
-1. [#20](https://github.com/KinsonDigital/KdGui/issues/20) - Look into render calls with pos and size changes.
+1. [#18](https://github.com/KinsonDigital/KdGui/pull/18) - Updated dependency _**xunit**_ to _**v2.9.0**_
+2. [#18](https://github.com/KinsonDigital/KdGui/pull/18) - Updated dependency _**xunit.runner.visualstudio**_ to _**v2.9.0**_
+3. [#19](https://github.com/KinsonDigital/KdGui/pull/19) - Updated dependency _**FluentAssertions.Analyzers**_ to _**v0.33.0**_
