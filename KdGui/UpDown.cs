@@ -19,7 +19,7 @@ internal sealed class UpDown : Control, IUpDown
 {
     private readonly string upId = Guid.NewGuid().ToString();
     private readonly string downId = Guid.NewGuid().ToString();
-    private string text = "ButtonRepeat";
+    private string text = "UpDown:";
 
     /// <summary>
     /// Initializes a new instance of the <see cref="UpDown"/> class.
@@ -54,13 +54,6 @@ internal sealed class UpDown : Control, IUpDown
     {
         get => this.text;
         set => this.text = value.EndsWith(':') ? value : $"{value}:";
-    }
-
-    /// <inheritdoc/>
-    protected override void Dispose(bool disposing)
-    {
-        this.ValueChanged = null;
-        base.Dispose(disposing);
     }
 
     /// <inheritdoc/>
@@ -103,5 +96,12 @@ internal sealed class UpDown : Control, IUpDown
 
         Width = (int)(textSize.X + totalSpacing + valueTextSize.X);
         Height = (int)Math.Max(Math.Max(textSize.Y, upBtnHeight), Math.Max(downBtnHeight, valueTextSize.Y));
+    }
+
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
+    {
+        this.ValueChanged = null;
+        base.Dispose(disposing);
     }
 }

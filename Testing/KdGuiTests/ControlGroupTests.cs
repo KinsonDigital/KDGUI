@@ -398,7 +398,7 @@ public class ControlGroupTests
     }
 
     [Theory]
-    [InlineData(true, true, 1f, 5, 4)]
+    [InlineData(true, true, 1f, 1, 4)]
     [InlineData(false, false, 0f, 0, 1)]
     public void Render_WhenInvoked_SetsCorrectWindowStyles(
         bool isVisible,
@@ -408,7 +408,6 @@ public class ControlGroupTests
         int expectedPopClrCount)
     {
         // Arrange
-        var preRenderCount = 5;
         var actualAlpha = float.MaxValue;
         var actualTextClr = default(Color);
 
@@ -439,15 +438,14 @@ public class ControlGroupTests
         this.mockImGuiInvoker.Received(expectedInvokedCount).PushStyleColor(ImGuiCol.ResizeGripHovered, Color.Transparent);
         this.mockImGuiInvoker.Received(expectedInvokedCount).PushStyleColor(ImGuiCol.ResizeGripActive, Color.Transparent);
 
-        this.mockImGuiInvoker.Received(preRenderCount).PopStyleColor(expectedPopClrCount);
-        this.mockImGuiInvoker.Received(preRenderCount).PopStyleVar(1);
+        this.mockImGuiInvoker.Received(1).PopStyleColor(expectedPopClrCount);
+        this.mockImGuiInvoker.Received(1).PopStyleVar(1);
     }
 
     [Fact]
     public void Render_WhenAutoSizingToContentWithVisibleTitleBar_AutoSizesToTitle()
     {
         // Arrange
-        var preRenderCount = 5;
         var actualBtnSize = Vector2.Zero;
 
         var sut = CreateSystemUnderTest();
@@ -463,8 +461,8 @@ public class ControlGroupTests
         sut.Render();
 
         // Assert
-        this.mockImGuiInvoker.Received(preRenderCount).CalcTextSize("Test Title");
-        this.mockImGuiInvoker.Received(preRenderCount).InvisibleButton("##title_width Test Title", new Vector2(128, 0));
+        this.mockImGuiInvoker.Received(1).CalcTextSize("Test Title");
+        this.mockImGuiInvoker.Received(1).InvisibleButton("##title_width Test Title", new Vector2(128, 0));
 
         // NOTE: The width of the title is always the width of the text plus 28 pixels to take
         // into account the ImGui window collapse button to the left of the title.
@@ -472,25 +470,21 @@ public class ControlGroupTests
     }
 
     [Theory]
-    [InlineData(true, 10, 0, 0f, 0f)]
-    [InlineData(true, 0, 20, 0f, 0f)]
-    [InlineData(false, 10, 0, 10f, 0f)]
-    [InlineData(false, 0, 20, 0f, 20f)]
+    [InlineData(true, 10, 0, 0f, 0f, 0)]
+    [InlineData(true, 0, 20, 0f, 0f, 0)]
+    [InlineData(false, 10, 0, 10f, 32f, 1)]
+    [InlineData(false, 0, 20, 32f, 20f, 1)]
     public void Render_WhenResizingControlGroup_UpdatesPosition(
         bool autoSieToFitContent,
         int width,
         int height,
         float expectedWidth,
-        float expectedHeight)
+        float expectedHeight,
+        int expectedInvokeCount)
     {
         // Arrange
         var sut = CreateSystemUnderTest();
         sut.AutoSizeToFitContent = autoSieToFitContent;
-
-        /* Set the 'shouldSetSize' field to default value of false instead of true to properly
-         * test out invoke counts.
-        */
-        sut.SetFieldValue("shouldSetSize", false);
 
         if (width != 0)
         {
@@ -502,13 +496,11 @@ public class ControlGroupTests
             sut.Height = height;
         }
 
-        sut.Render();
-
         // Act
         sut.Render();
 
         // Assert
-        this.mockImGuiInvoker.Received(1).SetWindowSize(new Vector2(expectedWidth, expectedHeight));
+        this.mockImGuiInvoker.Received(expectedInvokeCount).SetNextWindowSize(new Vector2(expectedWidth, expectedHeight));
     }
 
     [Fact]
@@ -533,7 +525,7 @@ public class ControlGroupTests
     }
 
     [Fact]
-    public void Render_WhenPositionIsSet_SetsImGuiWindowPosition()
+    public void Render_WhenWindowIsNotBeingDragged_SetsImGuiWindowPosition()
     {
         // Arrange
         // Guarantee that the window is not being dragged
@@ -542,13 +534,12 @@ public class ControlGroupTests
 
         var sut = CreateSystemUnderTest();
         sut.Position = new Point(10, 20);
-        sut.Render();
 
         // Act
         sut.Render();
 
         // Assert
-        this.mockImGuiInvoker.Received(1).SetWindowPos(new Vector2(10, 20));
+        this.mockImGuiInvoker.Received(1).SetNextWindowPos(new Vector2(10, 20));
     }
 
     [Fact]
@@ -558,7 +549,6 @@ public class ControlGroupTests
         var initInvoked = false;
         var sut = CreateSystemUnderTest();
         sut.Initialized += (_, _) => initInvoked = true;
-        sut.Render();
 
         // Act
         sut.Render();
@@ -571,7 +561,6 @@ public class ControlGroupTests
     public void Render_WhenDraggingControlGroup_UpdatesPosition()
     {
         // Arrange
-        var preRenderCount = 5;
         this.mockImGuiInvoker.IsWindowFocused().Returns(true);
         this.mockImGuiInvoker.IsMouseDragging(Arg.Any<ImGuiMouseButton>()).Returns(true);
 
@@ -581,15 +570,13 @@ public class ControlGroupTests
         sut.Render();
 
         // Assert
-        this.mockImGuiInvoker.Received(preRenderCount).GetWindowPos();
+        this.mockImGuiInvoker.Received(1).GetWindowPos();
     }
 
     [Fact]
     public void Render_WithDefaultSettings_RendersGroup()
     {
         // Arrange
-        var preRenderCount = 5;
-
         this.mockImGuiInvoker.IsWindowFocused().Returns(true);
 
         var sut = CreateSystemUnderTest();
@@ -599,12 +586,12 @@ public class ControlGroupTests
         sut.Render();
 
         // Assert
-        this.mockImGuiInvoker.Received(preRenderCount).PushID(Arg.Any<string>());
-        this.mockImGuiInvoker.Received(preRenderCount).Begin("Test Title", Arg.Any<ImGuiWindowFlags>());
-        this.mockImGuiInvoker.Received(preRenderCount).PopID();
-        this.mockImGuiInvoker.Received(preRenderCount).IsWindowFocused();
-        this.mockImGuiInvoker.Received(preRenderCount).IsMouseDragging(ImGuiMouseButton.Left);
-        this.mockImGuiInvoker.Received(preRenderCount).End();
+        this.mockImGuiInvoker.Received(1).PushID(Arg.Any<string>());
+        this.mockImGuiInvoker.Received(1).Begin("Test Title", Arg.Any<ImGuiWindowFlags>());
+        this.mockImGuiInvoker.Received(1).PopID();
+        this.mockImGuiInvoker.Received(1).IsWindowFocused();
+        this.mockImGuiInvoker.Received(1).IsMouseDragging(ImGuiMouseButton.Left);
+        this.mockImGuiInvoker.Received(1).End();
     }
 
     [Fact]

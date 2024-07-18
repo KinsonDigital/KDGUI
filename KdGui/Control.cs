@@ -16,7 +16,6 @@ internal abstract class Control : IControl
     private readonly IPushReactable renderReactable;
     private IDisposable? unsubscriber;
     private Guid windowOwnerId;
-    private bool isDisposed;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Control"/> class.
@@ -25,6 +24,9 @@ internal abstract class Control : IControl
     /// <param name="renderReactable">Manages render notifications.</param>
     protected Control(IImGuiInvoker imGuiInvoker, IPushReactable renderReactable)
     {
+        ArgumentNullException.ThrowIfNull(imGuiInvoker);
+        ArgumentNullException.ThrowIfNull(renderReactable);
+
         ImGuiInvoker = imGuiInvoker;
         this.renderReactable = renderReactable;
     }
@@ -63,9 +65,7 @@ internal abstract class Control : IControl
     /// <inheritdoc/>
     public Point Position { get; set; }
 
-    /// <summary>
-    /// Gets or sets the width of the control.
-    /// </summary>
+    /// <inheritdoc/>
     public virtual int Width { get; set; }
 
     /// <inheritdoc/>
@@ -76,6 +76,11 @@ internal abstract class Control : IControl
 
     /// <inheritdoc/>
     public bool Visible { get; set; } = true;
+
+    /// <summary>
+    /// Gets a value indicating whether if the control has been disposed of.
+    /// </summary>
+    protected bool IsDisposed { get; private set; }
 
     /// <summary>
     /// Gets the ImGui invoker.
@@ -99,11 +104,11 @@ internal abstract class Control : IControl
     // ReSharper disable once VirtualMemberNeverOverridden.Global
     protected virtual void Dispose(bool disposing)
     {
-        if (this.isDisposed)
+        if (IsDisposed)
         {
             return;
         }
 
-        this.isDisposed = true;
+        IsDisposed = true;
     }
 }
