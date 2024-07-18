@@ -53,7 +53,7 @@ internal sealed class UpDown : Control, IUpDown
     public string Text
     {
         get => this.text;
-        set => this.text = value.EndsWith(':') ? value : $"{value}:";
+        set => this.text = value;
     }
 
     /// <inheritdoc/>
