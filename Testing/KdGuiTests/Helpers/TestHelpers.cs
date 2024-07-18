@@ -37,6 +37,31 @@ public static class TestHelpers
     }
 
     /// <summary>
+    /// Sets a field of type <see cref="List{T}"/> with a name that matches the given <paramref name="eventName"/> to the value of null.
+    /// </summary>
+    /// <param name="fieldContainer">The object that contains the field.</param>
+    /// <param name="eventName">The name of the field.</param>
+    /// <typeparam name="TElements">The type of the field array's elements.</typeparam>
+    /// <returns>The <see cref="List{T}"/> of items.</returns>
+    public static EventHandler<EventArgs>? GetEvent<TElements>(this object fieldContainer, string eventName)
+    {
+        fieldContainer.Should().NotBeNull("setting the enum field value of a null object is not possible.");
+        eventName.Should().NotBeNullOrEmpty("setting an enum field value requires a non-empty or null field name.");
+
+        var targetType = fieldContainer.GetType();
+        var eventInfo = targetType.GetEvent(eventName);
+        eventInfo.Should().NotBeNull($"a field with the name '{eventName}' does not exist in the object.");
+
+        var eventFieldInfo = targetType.GetField(eventInfo.Name, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+
+        eventFieldInfo.Should().NotBeNull("event backing field must exist for test");
+
+        var eventField = eventFieldInfo.GetValue(fieldContainer) as EventHandler<EventArgs>;
+
+        return eventField;
+    }
+
+    /// <summary>
     /// Sets a field of type <see cref="List{T}"/> with a name that matches the given <paramref name="fieldName"/> to the value of null.
     /// </summary>
     /// <param name="fieldContainer">The object that contains the field.</param>

@@ -57,13 +57,6 @@ internal sealed class UpDown : Control, IUpDown
     }
 
     /// <inheritdoc/>
-    protected override void Dispose(bool disposing)
-    {
-        this.ValueChanged = null;
-        base.Dispose(disposing);
-    }
-
-    /// <inheritdoc/>
     protected override void Render()
     {
         ImGuiInvoker.Text(Text);
@@ -103,5 +96,12 @@ internal sealed class UpDown : Control, IUpDown
 
         Width = (int)(textSize.X + totalSpacing + valueTextSize.X);
         Height = (int)Math.Max(Math.Max(textSize.Y, upBtnHeight), Math.Max(downBtnHeight, valueTextSize.Y));
+    }
+
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
+    {
+        this.ValueChanged = null;
+        base.Dispose(disposing);
     }
 }

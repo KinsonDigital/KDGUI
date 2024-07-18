@@ -73,13 +73,6 @@ internal sealed class Slider : Control, ISlider
         }
     }
 
-    /// <inheritdoc/>
-    protected override void Dispose(bool disposing)
-    {
-        this.ValueChanged = null;
-        base.Dispose(disposing);
-    }
-
     /// <inheritdoc cref="Control.Render"/>
     protected override void Render()
     {
@@ -113,5 +106,12 @@ internal sealed class Slider : Control, ISlider
         {
             this.ValueChanged?.Invoke(this, this.value);
         }
+    }
+
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
+    {
+        this.ValueChanged = null;
+        base.Dispose(disposing);
     }
 }
