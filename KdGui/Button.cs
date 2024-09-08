@@ -16,6 +16,13 @@ using ImGuiNET;
 internal sealed class Button : Control, IButton
 {
     private readonly string id = Guid.NewGuid().ToString();
+    private readonly Color hoverClr = Color.FromArgb(255, 66, 150, 250);
+    private readonly Color activeClr = Color.FromArgb(255, 15, 135, 250);
+    private readonly Color disabledGray = Color.FromArgb(
+        255,
+        Color.DimGray.R - 40,
+        Color.DimGray.G - 40,
+        Color.DimGray.B - 40);
     private bool isMousePressedInvoked;
 
     /// <summary>
@@ -55,13 +62,17 @@ internal sealed class Button : Control, IButton
 
         ImGuiInvoker.PushID(this.id);
 
-        ImGuiInvoker.PushStyleColor(ImGuiCol.Text, Color.White);
+        ImGuiInvoker.PushStyleColor(ImGuiCol.Text, Enabled ? Color.White : Color.DimGray);
+        ImGuiInvoker.PushStyleColor(ImGuiCol.Button, Enabled ? BackgroundColor : this.disabledGray);
+        ImGuiInvoker.PushStyleColor(ImGuiCol.ButtonActive, Enabled ? this.activeClr : this.disabledGray);
+        ImGuiInvoker.PushStyleColor(ImGuiCol.ButtonHovered, Enabled ? this.hoverClr : this.disabledGray);
+
         ImGuiInvoker.Button(Text);
 
         Height = (int)ImGuiInvoker.GetFrameHeightWithSpacing();
         Width = (int)GetWidth(Text);
 
-        ImGuiInvoker.PopStyleColor(2);
+        ImGuiInvoker.PopStyleColor(4);
 
         ImGuiInvoker.PopID();
 
@@ -102,7 +113,7 @@ internal sealed class Button : Control, IButton
             this.isMousePressedInvoked = true;
         }
 
-        if (!ImGuiInvoker.IsMouseReleased(ImGuiMouseButton.Left))
+        if (!Enabled || !ImGuiInvoker.IsMouseReleased(ImGuiMouseButton.Left))
         {
             return;
         }
