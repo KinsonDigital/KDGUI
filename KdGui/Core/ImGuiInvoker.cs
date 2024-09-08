@@ -91,13 +91,7 @@ internal sealed class ImGuiInvoker : IImGuiInvoker
     public void PushStyleColor(ImGuiCol idx, uint col) => ImGui.PushStyleColor(idx, col);
 
     /// <inheritdoc/>
-    public void PushStyleColor(ImGuiCol idx, Color clr)
-    {
-        var clrVector = new Vector4(clr.R, clr.G, clr.B, clr.A);
-
-        var clrValue = ImGui.ColorConvertFloat4ToU32(clrVector);
-        PushStyleColor(idx, clrValue);
-    }
+    public void PushStyleColor(ImGuiCol idx, Color clr) => PushStyleColor(idx, ImGui.ColorConvertFloat4ToU32(clr.ToImGuiColor()));
 
     /// <inheritdoc/>
     public void PopStyleColor(int count) => ImGui.PopStyleColor(count);
