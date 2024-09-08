@@ -42,6 +42,9 @@ internal sealed class Button : Control, IButton
     /// <inheritdoc/>
     public string Text { get; set; }
 
+    /// <inheritdoc/>
+    public Color BackgroundColor { get; set; } = Color.FromArgb(255, 35, 70, 110);
+
     /// <inheritdoc cref="Control"/>
     protected override void Render()
     {
