@@ -161,7 +161,7 @@ public class ButtonTests
         this.mockImGuiInvoker.Received(1).PushStyleColor(ImGuiCol.Text, Color.White);
         this.mockImGuiInvoker.Received(1).Button("test-value");
         this.mockImGuiInvoker.Received(1).GetFrameHeightWithSpacing();
-        this.mockImGuiInvoker.Received(1).PopStyleColor(2);
+        this.mockImGuiInvoker.Received(1).PopStyleColor(4);
         this.mockImGuiInvoker.Received(1).PopID();
         this.mockImGuiInvoker.Received(1).IsItemHovered();
         this.mockImGuiInvoker.Received(1).IsMouseDown(ImGuiMouseButton.Left);

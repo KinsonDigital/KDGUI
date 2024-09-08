@@ -19,6 +19,11 @@ internal sealed class ComboBox : Control, IComboBox
 {
     private readonly string textId = Guid.NewGuid().ToString();
     private readonly string ctrlId = $"##combo-{Guid.NewGuid()}";
+    private readonly Color disabledGray = Color.FromArgb(
+        255,
+        Color.DimGray.R - 40,
+        Color.DimGray.G - 40,
+        Color.DimGray.B - 40);
     private int selectedItemIndex;
 
     /// <summary>
@@ -62,7 +67,7 @@ internal sealed class ComboBox : Control, IComboBox
     /// <summary>
     /// Gets or sets the list of items to display in the combo box.
     /// </summary>
-    public List<string> Items { get; set; } = new ();
+    public List<string> Items { get; set; } = [];
 
     /// <inheritdoc/>
     [SuppressMessage("csharpsquid", "S3776", Justification = "Do not care about cognitive complexity.")]
@@ -81,7 +86,7 @@ internal sealed class ComboBox : Control, IComboBox
         // Bump the label down to be vertically centered with the combo box
         ImGuiInvoker.SetCursorPos(currentPos with { Y = currentPos.Y + 5 });
 
-        var textColor = Enabled ? Color.White : Color.DarkGray;
+        var textColor = Enabled ? Color.White : Color.DimGray;
 
         ImGuiInvoker.PushID(this.textId);
         ImGuiInvoker.PushStyleColor(ImGuiCol.Text, textColor);
@@ -102,15 +107,14 @@ internal sealed class ComboBox : Control, IComboBox
         ImGuiInvoker.PushID(this.ctrlId);
         if (!Enabled)
         {
-            ImGuiInvoker.PushStyleColor(ImGuiCol.Text, Color.DarkGray);
-            ImGuiInvoker.PushStyleColor(ImGuiCol.FrameBg, Color.Gray);
-            ImGuiInvoker.PushStyleColor(ImGuiCol.FrameBgHovered, Color.Gray);
-            ImGuiInvoker.PushStyleColor(ImGuiCol.FrameBgActive, Color.Gray);
-            ImGuiInvoker.PushStyleColor(ImGuiCol.Button, Color.DimGray);
-            ImGuiInvoker.PushStyleColor(ImGuiCol.ButtonHovered, Color.DimGray);
+            ImGuiInvoker.PushStyleColor(ImGuiCol.FrameBg, this.disabledGray);
+            ImGuiInvoker.PushStyleColor(ImGuiCol.FrameBgHovered, this.disabledGray);
+            ImGuiInvoker.PushStyleColor(ImGuiCol.FrameBgActive, this.disabledGray);
+            ImGuiInvoker.PushStyleColor(ImGuiCol.Button, this.disabledGray);
+            ImGuiInvoker.PushStyleColor(ImGuiCol.ButtonHovered, this.disabledGray);
         }
 
-        if (ImGuiInvoker.BeginCombo(this.ctrlId, previewValue, ImGuiComboFlags.None))
+        if (ImGuiInvoker.BeginCombo(this.ctrlId, previewValue, Enabled ? ImGuiComboFlags.None : ImGuiComboFlags.NoArrowButton))
         {
             if (Enabled)
             {
@@ -137,15 +141,7 @@ internal sealed class ComboBox : Control, IComboBox
             ImGuiInvoker.EndCombo();
         }
 
-        if (Enabled)
-        {
-            return;
-        }
-
-        if (!Enabled)
-        {
-            ImGuiInvoker.PopStyleColor(6);
-        }
+        ImGuiInvoker.PopStyleColor(Enabled ? 1 : 6);
 
         ImGuiInvoker.PopID();
     }

@@ -7,6 +7,7 @@ namespace KdGui.Core;
 
 using System.Drawing;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using ImGuiNET;
 
 /// <inheritdoc/>
@@ -85,19 +86,36 @@ internal sealed class ImGuiInvoker : IImGuiInvoker
     public float GetFrameHeightWithSpacing() => ImGui.GetFrameHeightWithSpacing();
 
     /// <inheritdoc/>
+    public Vector4 GetStyleColorVec4(ImGuiCol idx)
+    {
+        Vector4 result;
+
+        unsafe
+        {
+            var clrPtr = new IntPtr(ImGui.GetStyleColorVec4(idx));
+
+            result = Marshal.PtrToStructure<Vector4>(clrPtr);
+        }
+
+        return result;
+    }
+
+    /// <inheritdoc/>
+    public Color GetStyleColor(ImGuiCol idx)
+    {
+        var clr = GetStyleColorVec4(idx);
+
+        return Color.FromArgb((byte)clr.X, (byte)clr.Y, (byte)clr.Z, (byte)clr.W);
+    }
+
+    /// <inheritdoc/>
     public void PushStyleColor(ImGuiCol idx, Vector4 col) => ImGui.PushStyleColor(idx, col);
 
     /// <inheritdoc/>
     public void PushStyleColor(ImGuiCol idx, uint col) => ImGui.PushStyleColor(idx, col);
 
     /// <inheritdoc/>
-    public void PushStyleColor(ImGuiCol idx, Color clr)
-    {
-        var clrVector = new Vector4(clr.R, clr.G, clr.B, clr.A);
-
-        var clrValue = ImGui.ColorConvertFloat4ToU32(clrVector);
-        PushStyleColor(idx, clrValue);
-    }
+    public void PushStyleColor(ImGuiCol idx, Color clr) => PushStyleColor(idx, ImGui.ColorConvertFloat4ToU32(clr.ToImGuiColor()));
 
     /// <inheritdoc/>
     public void PopStyleColor(int count) => ImGui.PopStyleColor(count);
