@@ -7,6 +7,7 @@ namespace KdGui.Core;
 
 using System.Drawing;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using ImGuiNET;
 
 /// <inheritdoc/>
@@ -83,6 +84,29 @@ internal sealed class ImGuiInvoker : IImGuiInvoker
 
     /// <inheritdoc/>
     public float GetFrameHeightWithSpacing() => ImGui.GetFrameHeightWithSpacing();
+
+    /// <inheritdoc/>
+    public Vector4 GetStyleColorVec4(ImGuiCol idx)
+    {
+        Vector4 result;
+
+        unsafe
+        {
+            var clrPtr = new IntPtr(ImGui.GetStyleColorVec4(idx));
+
+            result = Marshal.PtrToStructure<Vector4>(clrPtr);
+        }
+
+        return result;
+    }
+
+    /// <inheritdoc/>
+    public Color GetStyleColor(ImGuiCol idx)
+    {
+        var clr = GetStyleColorVec4(idx);
+
+        return Color.FromArgb((byte)clr.X, (byte)clr.Y, (byte)clr.Z, (byte)clr.W);
+    }
 
     /// <inheritdoc/>
     public void PushStyleColor(ImGuiCol idx, Vector4 col) => ImGui.PushStyleColor(idx, col);

@@ -204,6 +204,21 @@ public interface IImGuiInvoker
     float GetFrameHeightWithSpacing();
 
     /// <summary>
+    /// Gets the given style color as a <see cref="Vector4"/>.
+    /// </summary>
+    /// <param name="idx">The style color to get.</param>
+    /// <returns>The color as a <see cref="Vector4"/>.</returns>
+    /// <remarks>The color component order is R,G,B,A.</remarks>
+    Vector4 GetStyleColorVec4(ImGuiCol idx);
+
+    /// <summary>
+    /// Gets the current style color.
+    /// </summary>
+    /// <param name="idx">The style color to get.</param>
+    /// <returns>The color.</returns>
+    Color GetStyleColor(ImGuiCol idx);
+
+    /// <summary>
     /// Pushes the color using the given <paramref name="col"/> to the current style described by the given <paramref name="idx"/>.
     /// </summary>
     /// <param name="idx">The type of area of the style to push the color.</param>
