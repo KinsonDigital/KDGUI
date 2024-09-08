@@ -8,12 +8,12 @@ using Core;
 using System;
 using System.Drawing;
 using Carbonate;
-using Carbonate.NonDirectional;
+using Carbonate.OneWay;
 
 /// <inheritdoc/>
 internal abstract class Control : IControl
 {
-    private readonly IPushReactable renderReactable;
+    private readonly IPushReactable<GridData> renderReactable;
     private IDisposable? unsubscriber;
     private Guid windowOwnerId;
 
@@ -22,7 +22,7 @@ internal abstract class Control : IControl
     /// </summary>
     /// <param name="imGuiInvoker">Invokes ImGui functions.</param>
     /// <param name="renderReactable">Manages render notifications.</param>
-    protected Control(IImGuiInvoker imGuiInvoker, IPushReactable renderReactable)
+    protected Control(IImGuiInvoker imGuiInvoker, IPushReactable<GridData> renderReactable)
     {
         ArgumentNullException.ThrowIfNull(imGuiInvoker);
         ArgumentNullException.ThrowIfNull(renderReactable);
@@ -45,7 +45,7 @@ internal abstract class Control : IControl
                 return;
             }
 
-            // If the subscription is no already set, then we need to unsubscribe
+            // If the subscription is not already set, then we need to unsubscribe
             // the already subscribed id before resubscribing
             if (this.windowOwnerId != Guid.Empty)
             {
@@ -54,9 +54,15 @@ internal abstract class Control : IControl
 
             this.windowOwnerId = value;
 
-            this.unsubscriber = this.renderReactable.CreateNonReceiveOrRespond(
+            this.unsubscriber = this.renderReactable.CreateOneWayReceive(
                 this.windowOwnerId,
-                Render,
+                (gridData) =>
+                {
+                    if (gridData.Row == Row && gridData.Column == Column)
+                    {
+                        Render();
+                    }
+                },
                 () => this.unsubscriber?.Dispose(),
                 callerMemberName: $"{Name}|{this.windowOwnerId}");
         }
@@ -76,6 +82,12 @@ internal abstract class Control : IControl
 
     /// <inheritdoc/>
     public bool Visible { get; set; } = true;
+
+    /// <inheritdoc/>
+    public int Row { get; set; }
+
+    /// <inheritdoc/>
+    public int Column { get; set; }
 
     /// <summary>
     /// Gets a value indicating whether if the control has been disposed of.

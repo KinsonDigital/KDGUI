@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Numerics;
-using Carbonate.NonDirectional;
+using Carbonate.OneWay;
 using ImGuiNET;
 
 /// <inheritdoc cref="IComboBox"/>
@@ -26,7 +26,7 @@ internal sealed class ComboBox : Control, IComboBox
     /// </summary>
     /// <param name="imGuiInvoker">Invokes ImGui functions.</param>
     /// <param name="renderReactable">Manages render notifications.</param>
-    public ComboBox(IImGuiInvoker imGuiInvoker, IPushReactable renderReactable)
+    public ComboBox(IImGuiInvoker imGuiInvoker, IPushReactable<GridData> renderReactable)
         : base(imGuiInvoker, renderReactable)
     {
     }

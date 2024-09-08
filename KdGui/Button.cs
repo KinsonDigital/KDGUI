@@ -8,7 +8,7 @@ using Core;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using Carbonate.NonDirectional;
+using Carbonate.OneWay;
 using ImGuiNET;
 
 /// <inheritdoc cref="IButton"/>
@@ -23,7 +23,7 @@ internal sealed class Button : Control, IButton
     /// </summary>
     /// <param name="imGuiInvoker">Invokes ImGui functions.</param>
     /// <param name="renderReactable">Manages render notifications.</param>
-    public Button(IImGuiInvoker imGuiInvoker, IPushReactable renderReactable)
+    public Button(IImGuiInvoker imGuiInvoker, IPushReactable<GridData> renderReactable)
         : base(imGuiInvoker, renderReactable)
     {
         Text = "Button";

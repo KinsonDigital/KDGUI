@@ -7,6 +7,7 @@ namespace KdGuiTests;
 using System.Drawing;
 using System.Numerics;
 using Carbonate.NonDirectional;
+using Carbonate.OneWay;
 using FluentAssertions;
 using Helpers;
 using ImGuiNET;
@@ -20,7 +21,7 @@ using NSubstitute;
 public class ControlGroupTests
 {
     private readonly IImGuiInvoker mockImGuiInvoker;
-    private readonly IPushReactable mockPushReactable;
+    private readonly IPushReactable<GridData> mockPushReactable;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ControlGroupTests"/> class.
@@ -28,7 +29,7 @@ public class ControlGroupTests
     public ControlGroupTests()
     {
         this.mockImGuiInvoker = Substitute.For<IImGuiInvoker>();
-        this.mockPushReactable = Substitute.For<IPushReactable>();
+        this.mockPushReactable = Substitute.For<IPushReactable<GridData>>();
     }
 
     #region Constructor Tests

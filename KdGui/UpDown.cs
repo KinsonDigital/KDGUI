@@ -8,7 +8,7 @@ using Core;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using Carbonate.NonDirectional;
+using Carbonate.OneWay;
 using ImGuiNET;
 
 /// <summary>
@@ -26,7 +26,7 @@ internal sealed class UpDown : Control, IUpDown
     /// </summary>
     /// <param name="imGuiInvoker">Invokes ImGui functions.</param>
     /// <param name="renderReactable">Manages render notifications.</param>
-    public UpDown(IImGuiInvoker imGuiInvoker, IPushReactable renderReactable)
+    public UpDown(IImGuiInvoker imGuiInvoker, IPushReactable<GridData> renderReactable)
         : base(imGuiInvoker, renderReactable)
     {
     }

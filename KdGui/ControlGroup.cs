@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Numerics;
-using Carbonate.NonDirectional;
+using Carbonate.OneWay;
 using ImGuiNET;
 
 /// <inheritdoc/>
@@ -20,7 +20,7 @@ internal sealed class ControlGroup : IControlGroup
     private const float CollapseButtonWidth = 28f;
     private readonly List<IControl> controls = [];
     private readonly IImGuiInvoker imGuiInvoker;
-    private readonly IPushReactable renderReactable;
+    private readonly IPushReactable<GridData> renderReactable;
     private readonly string pushId;
     private Point position;
     private Size size = new (32, 32);
@@ -34,7 +34,7 @@ internal sealed class ControlGroup : IControlGroup
     /// </summary>
     /// <param name="imGuiInvoker">Invokes ImGui functions.</param>
     /// <param name="renderReactable">Manages render notifications.</param>
-    public ControlGroup(IImGuiInvoker imGuiInvoker, IPushReactable renderReactable)
+    public ControlGroup(IImGuiInvoker imGuiInvoker, IPushReactable<GridData> renderReactable)
     {
         ArgumentNullException.ThrowIfNull(imGuiInvoker);
         ArgumentNullException.ThrowIfNull(renderReactable);
@@ -97,6 +97,9 @@ internal sealed class ControlGroup : IControlGroup
     public int Bottom => this.position.Y + this.size.Height;
 
     /// <inheritdoc/>
+    public bool GridVisible { get; set; }
+
+    /// <inheritdoc/>
     public bool TitleBarVisible { get; set; } = true;
 
     /// <inheritdoc/>
@@ -106,12 +109,27 @@ internal sealed class ControlGroup : IControlGroup
     public bool NoResize { get; set; }
 
     /// <inheritdoc/>
+    public int TotalRows { get; set; } = 1;
+
+    /// <inheritdoc/>
+    public int TotalColumns { get; set; } = 1;
+
+    /// <inheritdoc/>
     public bool Visible { get; set; } = true;
 
     /// <inheritdoc/>
     public void Add(IControl control)
     {
         control.WindowOwnerId = Id;
+        this.controls.Add(control);
+    }
+
+    /// <inheritdoc/>
+    public void Add(IControl control, int row, int column)
+    {
+        control.WindowOwnerId = Id;
+        control.Row = row;
+        control.Column = column;
         this.controls.Add(control);
     }
 
@@ -164,9 +182,30 @@ internal sealed class ControlGroup : IControlGroup
 
         this.imGuiInvoker.PopID();
 
-        if (Visible)
+        if (Visible && this.controls.Count > 0)
         {
-            this.renderReactable.Push(Id);
+            if (this.imGuiInvoker.BeginTable(Id.ToString(), TotalColumns))
+            {
+                for (var row = 0; row < TotalRows; row++)
+                {
+                    this.imGuiInvoker.TableNextRow(ImGuiTableRowFlags.None, 25);
+                    for (var col = 0; col < TotalColumns; col++)
+                    {
+                        this.imGuiInvoker.TableSetColumnIndex(col);
+
+                        if (GridVisible)
+                        {
+                            var isEvenCell = (row + col) % 2 == 0;
+                            var bgColor = isEvenCell ? new Vector4(0.5f, 0.5f, 0.5f, 1) : new Vector4(0.7f, 0.7f, 0.7f, 1);
+                            this.imGuiInvoker.TableSetBgColor(ImGuiTableBgTarget.CellBg, bgColor);
+                        }
+
+                        this.renderReactable.Push(Id, new GridData { Row = row, Column = col });
+                    }
+                }
+
+                this.imGuiInvoker.EndTable();
+            }
         }
 
         if (this.size != this.prevSize)

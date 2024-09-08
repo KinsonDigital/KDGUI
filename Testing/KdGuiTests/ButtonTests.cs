@@ -6,9 +6,8 @@ namespace KdGuiTests;
 
 using System.Drawing;
 using System.Numerics;
-using System.Runtime.InteropServices;
-using Carbonate.Core.NonDirectional;
-using Carbonate.NonDirectional;
+using Carbonate.Core.OneWay;
+using Carbonate.OneWay;
 using FluentAssertions;
 using Helpers;
 using ImGuiNET;
@@ -22,7 +21,7 @@ using NSubstitute;
 public class ButtonTests
 {
     private readonly IImGuiInvoker mockImGuiInvoker;
-    private readonly IPushReactable mockRenderReactable;
+    private readonly IPushReactable<GridData> mockRenderReactable;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ButtonTests"/> class.
@@ -30,7 +29,7 @@ public class ButtonTests
     public ButtonTests()
     {
         this.mockImGuiInvoker = Substitute.For<IImGuiInvoker>();
-        this.mockRenderReactable = Substitute.For<IPushReactable>();
+        this.mockRenderReactable = Substitute.For<IPushReactable<GridData>>();
     }
 
     #region Constructor Tests
@@ -103,12 +102,12 @@ public class ButtonTests
         this.mockImGuiInvoker.GetStyle().Returns(new ImGuiStylePtr(stylePtr));
         this.mockImGuiInvoker.IsItemHovered().Returns(false);
 
-        IReceiveSubscription? subscription = null;
+        IReceiveSubscription<GridData>? subscription = null;
 
-        this.mockRenderReactable.When(x => x.Subscribe(Arg.Any<IReceiveSubscription>()))
+        this.mockRenderReactable.When(x => x.Subscribe(Arg.Any<IReceiveSubscription<GridData>>()))
             .Do(callInfo =>
             {
-                subscription = callInfo.Arg<IReceiveSubscription>();
+                subscription = callInfo.Arg<IReceiveSubscription<GridData>>();
             });
 
         var sut = CreateSystemUnderTest();
@@ -116,7 +115,7 @@ public class ButtonTests
         sut.WindowOwnerId = guid;
 
         // Act
-        subscription?.OnReceive();
+        subscription?.OnReceive(new GridData { Row = 0, Column = 0 });
 
         // Assert
         this.mockImGuiInvoker.DidNotReceive().PushID(Arg.Any<string>());
@@ -141,12 +140,12 @@ public class ButtonTests
         this.mockImGuiInvoker.GetStyle().Returns(new ImGuiStylePtr(stylePtr));
         this.mockImGuiInvoker.IsItemHovered().Returns(true);
 
-        IReceiveSubscription? subscription = null;
+        IReceiveSubscription<GridData>? subscription = null;
 
-        this.mockRenderReactable.When(x => x.Subscribe(Arg.Any<IReceiveSubscription>()))
+        this.mockRenderReactable.When(x => x.Subscribe(Arg.Any<IReceiveSubscription<GridData>>()))
             .Do(callInfo =>
             {
-                subscription = callInfo.Arg<IReceiveSubscription>();
+                subscription = callInfo.Arg<IReceiveSubscription<GridData>>();
             });
 
         var sut = CreateSystemUnderTest();
@@ -154,7 +153,7 @@ public class ButtonTests
         sut.WindowOwnerId = guid;
 
         // Act
-        subscription?.OnReceive();
+        subscription?.OnReceive(new GridData { Row = 0, Column = 0 });
 
         // Assert
         this.mockImGuiInvoker.Received(1).PushID(Arg.Any<string>());
@@ -179,19 +178,19 @@ public class ButtonTests
         this.mockImGuiInvoker.GetStyle().Returns(new ImGuiStylePtr(stylePtr));
         this.mockImGuiInvoker.IsItemHovered().Returns(false);
 
-        IReceiveSubscription? subscription = null;
+        IReceiveSubscription<GridData>? subscription = null;
 
-        this.mockRenderReactable.When(x => x.Subscribe(Arg.Any<IReceiveSubscription>()))
+        this.mockRenderReactable.When(x => x.Subscribe(Arg.Any<IReceiveSubscription<GridData>>()))
             .Do(callInfo =>
             {
-                subscription = callInfo.Arg<IReceiveSubscription>();
+                subscription = callInfo.Arg<IReceiveSubscription<GridData>>();
             });
 
         var sut = CreateSystemUnderTest();
         sut.WindowOwnerId = guid;
 
         // Act
-        subscription?.OnReceive();
+        subscription?.OnReceive(new GridData { Row = 0, Column = 0 });
 
         // Assert
         this.mockImGuiInvoker.DidNotReceive().IsMouseDown(Arg.Any<ImGuiMouseButton>());
@@ -213,12 +212,12 @@ public class ButtonTests
         this.mockImGuiInvoker.IsMouseDown(Arg.Any<ImGuiMouseButton>()).Returns(true);
         this.mockImGuiInvoker.IsMouseReleased(Arg.Any<ImGuiMouseButton>()).Returns(false);
 
-        IReceiveSubscription? subscription = null;
+        IReceiveSubscription<GridData>? subscription = null;
 
-        this.mockRenderReactable.When(x => x.Subscribe(Arg.Any<IReceiveSubscription>()))
+        this.mockRenderReactable.When(x => x.Subscribe(Arg.Any<IReceiveSubscription<GridData>>()))
             .Do(callInfo =>
             {
-                subscription = callInfo.Arg<IReceiveSubscription>();
+                subscription = callInfo.Arg<IReceiveSubscription<GridData>>();
             });
 
         var sut = CreateSystemUnderTest();
@@ -227,7 +226,7 @@ public class ButtonTests
         sut.MouseReleased += (_, _) => mouseReleasedInvoked = true;
 
         // Act
-        subscription?.OnReceive();
+        subscription?.OnReceive(new GridData { Row = 0, Column = 0 });
 
         // Assert
         mousePressedInvoked.Should().BeTrue();
@@ -249,12 +248,12 @@ public class ButtonTests
         // this.mockImGuiInvoker.IsMouseDown(Arg.Any<ImGuiMouseButton>()).Returns(true);
         this.mockImGuiInvoker.IsMouseReleased(Arg.Any<ImGuiMouseButton>()).Returns(true);
 
-        IReceiveSubscription? subscription = null;
+        IReceiveSubscription<GridData>? subscription = null;
 
-        this.mockRenderReactable.When(x => x.Subscribe(Arg.Any<IReceiveSubscription>()))
+        this.mockRenderReactable.When(x => x.Subscribe(Arg.Any<IReceiveSubscription<GridData>>()))
             .Do(callInfo =>
             {
-                subscription = callInfo.Arg<IReceiveSubscription>();
+                subscription = callInfo.Arg<IReceiveSubscription<GridData>>();
             });
 
         var sut = CreateSystemUnderTest();
@@ -263,7 +262,7 @@ public class ButtonTests
         sut.Click += (_, _) => clickInvoked = true;
 
         // Act
-        subscription?.OnReceive();
+        subscription?.OnReceive(new GridData { Row = 0, Column = 0 });
 
         // Assert
         mouseReleasedInvoked.Should().BeTrue();

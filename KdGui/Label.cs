@@ -6,7 +6,7 @@ namespace KdGui;
 
 using System.Diagnostics.CodeAnalysis;
 using Core;
-using Carbonate.NonDirectional;
+using Carbonate.OneWay;
 
 /// <inheritdoc cref="ILabel"/>
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global", Justification = "Instantiated via IoC container.")]
@@ -17,7 +17,7 @@ internal sealed class Label : Control, ILabel
     /// </summary>
     /// <param name="imGuiInvoker">Invokes ImGui functions.</param>
     /// <param name="renderReactable">Manages render notifications.</param>
-    public Label(IImGuiInvoker imGuiInvoker, IPushReactable renderReactable)
+    public Label(IImGuiInvoker imGuiInvoker, IPushReactable<GridData> renderReactable)
         : base(imGuiInvoker, renderReactable)
     {
     }

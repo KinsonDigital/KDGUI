@@ -51,4 +51,6 @@ internal static class ExtensionMethods
     /// <param name="value">The vector to convert.</param>
     /// <returns>The converted result.</returns>
     public static Point ToPoint(this Vector2 value) => new ((int)value.X, (int)value.Y);
+
+    public static Vector4 ToVector4(this Color value) => new (value.R, value.G, value.B, value.A);
 }

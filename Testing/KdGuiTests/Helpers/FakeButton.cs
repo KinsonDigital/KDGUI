@@ -34,5 +34,11 @@ public class FakeButton : IControl
     public bool Visible { get; set; }
 
     /// <inheritdoc/>
+    public int Row { get; set; }
+
+    /// <inheritdoc/>
+    public int Column { get; set; }
+
+    /// <inheritdoc/>
     public void Dispose() => throw new NotImplementedException();
 }

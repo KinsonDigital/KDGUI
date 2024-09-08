@@ -7,7 +7,7 @@ namespace KdGui;
 using Core;
 using System;
 using System.Diagnostics.CodeAnalysis;
-using Carbonate.NonDirectional;
+using Carbonate.OneWay;
 using ImGuiNET;
 
 /// <inheritdoc cref="INextPrevious"/>
@@ -19,7 +19,7 @@ internal sealed class NextPrevious : Control, INextPrevious
     /// </summary>
     /// <param name="imGuiInvoker">Invokes ImGui functions.</param>
     /// <param name="renderReactable">Manages render notifications.</param>
-    public NextPrevious(IImGuiInvoker imGuiInvoker, IPushReactable renderReactable)
+    public NextPrevious(IImGuiInvoker imGuiInvoker, IPushReactable<GridData> renderReactable)
         : base(imGuiInvoker, renderReactable)
     {
     }

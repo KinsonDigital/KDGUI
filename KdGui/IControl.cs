@@ -46,4 +46,14 @@ public interface IControl : IDisposable
     /// Gets or sets a value indicating whether the control is visible.
     /// </summary>
     bool Visible { get; set; }
+
+    /// <summary>
+    /// Gets or sets the grid row that the control will belong to.
+    /// </summary>
+    int Row { get; set; }
+
+    /// <summary>
+    /// Gets or sets the grid column that the control will belong to.
+    /// </summary>
+    int Column { get; set; }
 }

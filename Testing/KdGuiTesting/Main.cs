@@ -35,6 +35,8 @@ public class Main : Window
         this.nextPrevious.Previous += NextPreviousOnPrevious;
 
         this.ctrlGroup = this.ctrlFactory.CreateControlGroup();
+        this.ctrlGroup.TotalRows = 1;
+        this.ctrlGroup.TotalColumns = 1;
         this.ctrlGroup.Add(this.nextPrevious);
         this.ctrlGroup.NoResize = true;
         this.ctrlGroup.TitleBarVisible = false;

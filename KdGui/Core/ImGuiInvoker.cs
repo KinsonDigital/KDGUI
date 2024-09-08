@@ -12,6 +12,8 @@ using ImGuiNET;
 /// <inheritdoc/>
 internal sealed class ImGuiInvoker : IImGuiInvoker
 {
+    // ReSharper disable InconsistentNaming
+
      /// <inheritdoc/>
     public ImGuiIOPtr GetIO() => ImGui.GetIO();
 
@@ -22,16 +24,33 @@ internal sealed class ImGuiInvoker : IImGuiInvoker
     public void End() => ImGui.End();
 
     /// <inheritdoc/>
+    public bool BeginTable(string str_id, int column) => ImGui.BeginTable(str_id, column);
+
+    /// <inheritdoc/>
+    public void TableNextRow(ImGuiTableRowFlags row_flags, float row_height) => ImGui.TableNextRow(row_flags, row_height);
+
+    /// <inheritdoc/>
+    public void TableSetColumnIndex(int column) => ImGui.TableSetColumnIndex(column);
+
+    /// <inheritdoc/>
+    public void TableSetupColumn(ImGuiTableColumnFlags flags, float weight) => ImGui.TableSetupColumn(string.Empty, flags, weight);
+
+    public void TableSetBgColor(ImGuiTableBgTarget target, Vector4 color)
+    {
+        ImGui.TableSetBgColor(target, ImGui.ColorConvertFloat4ToU32(color));
+    }
+
+    /// <inheritdoc/>
+    public void EndTable() => ImGui.EndTable();
+
+    /// <inheritdoc/>
     public void Text(string fmt) => ImGui.Text(fmt);
 
     /// <inheritdoc/>
-    // ReSharper disable once InconsistentNaming
     public bool ArrowButton(string str_id, ImGuiDir dir) => ImGui.ArrowButton(str_id, dir);
 
     /// <inheritdoc/>
-    // ReSharper disable InconsistentNaming
     public bool SliderFloat(string label, ref float v, float v_min, float v_max) => ImGui.SliderFloat(label, ref v, v_min, v_max);
-    // ReSharper restore InconsistentNaming
 
     /// <inheritdoc/>
     public void Button(string label) => ImGui.Button(label);
@@ -40,12 +59,9 @@ internal sealed class ImGuiInvoker : IImGuiInvoker
     public bool Checkbox(string label, ref bool v) => ImGui.Checkbox(label, ref v);
 
     /// <inheritdoc/>
-    // ReSharper disable InconsistentNaming
     public bool InvisibleButton(string str_id, Vector2 size) => ImGui.InvisibleButton(str_id, size);
-    // ReSharper restore InconsistentNaming
 
     /// <inheritdoc/>
-    // ReSharper disable once InconsistentNaming
     public bool BeginCombo(string label, string preview_value, ImGuiComboFlags flags) => ImGui.BeginCombo(label, preview_value, flags);
 
     /// <inheritdoc/>
@@ -64,18 +80,15 @@ internal sealed class ImGuiInvoker : IImGuiInvoker
     public void SameLine() => ImGui.SameLine();
 
     /// <inheritdoc/>
-    // ReSharper disable once InconsistentNaming
     public void SameLine(float offset_from_start_x, float spacing) => ImGui.SameLine(offset_from_start_x, spacing);
 
     /// <inheritdoc/>
     public Vector2 GetCursorPos() => ImGui.GetCursorPos();
 
     /// <inheritdoc/>
-    // ReSharper disable once InconsistentNaming
     public void SetCursorPos(Vector2 local_pos) => ImGui.SetCursorPos(local_pos);
 
     /// <inheritdoc/>
-    // ReSharper disable once InconsistentNaming
     public void PushID(string str_id) => ImGui.PushID(str_id);
 
     /// <inheritdoc/>
@@ -130,7 +143,6 @@ internal sealed class ImGuiInvoker : IImGuiInvoker
     public void SetItemDefaultFocus() => ImGui.SetItemDefaultFocus();
 
     /// <inheritdoc/>
-    // ReSharper disable once InconsistentNaming
     public void SetNextItemWidth(float item_width) => ImGui.SetNextItemWidth(item_width);
 
     /// <inheritdoc/>

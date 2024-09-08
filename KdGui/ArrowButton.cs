@@ -7,7 +7,7 @@ namespace KdGui;
 using Core;
 using System;
 using System.Diagnostics.CodeAnalysis;
-using Carbonate.NonDirectional;
+using Carbonate.OneWay;
 using ImGuiNET;
 
 /// <inheritdoc cref="IArrowButton"/>
@@ -22,7 +22,7 @@ internal sealed class ArrowButton : Control, IArrowButton
     /// </summary>
     /// <param name="imGuiInvoker">Invokes ImGui functions.</param>
     /// <param name="renderReactable">Manages render notifications.</param>
-    public ArrowButton(IImGuiInvoker imGuiInvoker, IPushReactable renderReactable)
+    public ArrowButton(IImGuiInvoker imGuiInvoker, IPushReactable<GridData> renderReactable)
         : base(imGuiInvoker, renderReactable)
     {
     }

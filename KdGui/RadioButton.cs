@@ -7,7 +7,7 @@ namespace KdGui;
 using Core;
 using System;
 using System.Diagnostics.CodeAnalysis;
-using Carbonate.NonDirectional;
+using Carbonate.OneWay;
 using ImGuiNET;
 
 /// <inheritdoc cref="IRadioButton"/>
@@ -19,7 +19,7 @@ internal class RadioButton : Control, IRadioButton
     /// </summary>
     /// <param name="imGuiInvoker">Invokes ImGui functions.</param>
     /// <param name="renderReactable">Manages render notifications.</param>
-    public RadioButton(IImGuiInvoker imGuiInvoker, IPushReactable renderReactable)
+    public RadioButton(IImGuiInvoker imGuiInvoker, IPushReactable<GridData> renderReactable)
         : base(imGuiInvoker, renderReactable)
     {
     }

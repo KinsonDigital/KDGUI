@@ -14,11 +14,12 @@ using ImGuiNET;
 /// </summary>
 public interface IImGuiInvoker
 {
+    // ReSharper disable InconsistentNaming
+
     /// <summary>
     /// Gets the IO object for system and <see cref="ImGui"/> related settings and information.
     /// </summary>
     /// <returns>The config/settings/info object.</returns>
-    // ReSharper disable once InconsistentNaming
     ImGuiIOPtr GetIO();
 
     /// <summary>
@@ -36,6 +37,34 @@ public interface IImGuiInvoker
     /// Signifies the end of the creation of a window.
     /// </summary>
     void End();
+
+    /// <summary>
+    /// Creates a table.
+    /// </summary>
+    /// <param name="str_id">The id of the table. This is used to identify the table and must be unique.</param>
+    /// <param name="column">The number of columns in the table. This is used to determine the number of columns in the table.</param>
+    /// <returns>True if the table has been created.  If false, then the table could not be created.</returns>
+    bool BeginTable(string str_id, int column) => ImGui.BeginTable(str_id, column);
+
+    /// <summary>
+    /// Ends the table.
+    /// </summary>
+    void EndTable() => ImGui.EndTable();
+
+    /// <summary>
+    /// Moves to the next row in the table.
+    /// </summary>
+    void TableNextRow(ImGuiTableRowFlags row_flags, float row_height);
+
+    /// <summary>
+    /// Sets the column index for the table.
+    /// </summary>
+    /// <param name="column">The column index.</param>
+    void TableSetColumnIndex(int column);
+
+    void TableSetupColumn(ImGuiTableColumnFlags flags, float weight);
+
+    void TableSetBgColor(ImGuiTableBgTarget target, Vector4 color);
 
     /// <summary>
     /// Creates a test control.
@@ -87,7 +116,6 @@ public interface IImGuiInvoker
     /// <param name="str_id">The id of the button.</param>
     /// <param name="dir">The direction of the text relative to the button.</param>
     /// <returns>True if the button has been clicked.</returns>
-    // ReSharper disable once InconsistentNaming
     bool ArrowButton(string str_id, ImGuiDir dir);
 
     /// <summary>
@@ -98,7 +126,6 @@ public interface IImGuiInvoker
     /// <param name="v_min">The minimum value.</param>
     /// <param name="v_max">The maximum value.</param>
     /// <returns>True if the button has been clicked.</returns>
-    // ReSharper disable InconsistentNaming
     bool SliderFloat(string label, ref float v, float v_min, float v_max);
 
     /// <summary>
@@ -167,7 +194,6 @@ public interface IImGuiInvoker
     /// </summary>
     /// <param name="offset_from_start_x">The horizontal offset from the start of the previous control.</param>
     /// <param name="spacing">The amount of spacing between the controls.</param>
-    // ReSharper disable once InconsistentNaming
     void SameLine(float offset_from_start_x, float spacing);
 
     /// <summary>
@@ -180,21 +206,17 @@ public interface IImGuiInvoker
     /// Sets the position of the cursor.
     /// </summary>
     /// <param name="local_pos">The position of where to set the cursor.</param>
-    // ReSharper disable once InconsistentNaming
     void SetCursorPos(Vector2 local_pos);
 
     /// <summary>
     /// Creates a new scoped ID for further control operations.
     /// </summary>
     /// <param name="str_id">The id of the scope.</param>
-    // ReSharper disable InconsistentNaming
     void PushID(string str_id);
-    // ReSharper restore InconsistentNaming
 
     /// <summary>
     /// Ends the current scoped ID.
     /// </summary>
-    // ReSharper disable once InconsistentNaming
     void PopID();
 
     /// <summary>
@@ -299,7 +321,6 @@ public interface IImGuiInvoker
     /// Sets the width of the next item.
     /// </summary>
     /// <param name="item_width">The width.</param>
-    // ReSharper disable once InconsistentNaming
     void SetNextItemWidth(float item_width);
 
     /// <summary>

@@ -78,6 +78,21 @@ public interface IControlGroup : IDisposable
     int Bottom { get; }
 
     /// <summary>
+    /// Gets or sets the total number of rows.
+    /// </summary>
+    int TotalRows { get; set; }
+
+    /// <summary>
+    /// Gets or sets the total number of columns.
+    /// </summary>
+    int TotalColumns { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the grid is visible.
+    /// </summary>
+    bool GridVisible { get; set; }
+
+    /// <summary>
     /// Gets or sets a value indicating whether the title bar is visible.
     /// </summary>
     bool TitleBarVisible { get; set; }
@@ -103,6 +118,14 @@ public interface IControlGroup : IDisposable
     /// </summary>
     /// <param name="control">The control to add.</param>
     void Add(IControl control);
+
+    /// <summary>
+    /// Adds the given <paramref name="control"/> to the control group.
+    /// </summary>
+    /// <param name="control">The control to add.</param>
+    /// <param name="row">The grid row that the control will belong to.</param>
+    /// <param name="column">The grid column that the control will belong to.</param>
+    void Add(IControl control, int row, int column);
 
     /// <summary>
     /// Gets a control of type <typeparamref name="T"/> that has the given <paramref name="name"/>.

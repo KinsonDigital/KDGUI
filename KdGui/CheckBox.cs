@@ -8,7 +8,7 @@ using Core;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using Carbonate.NonDirectional;
+using Carbonate.OneWay;
 using ImGuiNET;
 
 /// <inheritdoc cref="ICheckBox"/>
@@ -23,7 +23,7 @@ internal sealed class CheckBox : Control, ICheckBox
     /// </summary>
     /// <param name="imGuiInvoker">Invokes ImGui functions.</param>
     /// <param name="renderReactable">Manages render notifications.</param>
-    public CheckBox(IImGuiInvoker imGuiInvoker, IPushReactable renderReactable)
+    public CheckBox(IImGuiInvoker imGuiInvoker, IPushReactable<GridData> renderReactable)
         : base(imGuiInvoker, renderReactable)
     {
     }

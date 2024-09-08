@@ -4,7 +4,7 @@
 
 namespace KdGui;
 
-using Carbonate.NonDirectional;
+using Carbonate.OneWay;
 using Core;
 using SimpleInjector;
 
@@ -38,7 +38,7 @@ internal static class IoC
     private static void SetupContainer()
     {
         IoCContainer.Options.EnableAutoVerification = false;
-        IoCContainer.Register<IPushReactable, PushReactable>(Lifestyle.Singleton);
+        IoCContainer.Register<IPushReactable<GridData>, PushReactable<GridData>>(Lifestyle.Singleton);
         IoCContainer.Register<IImGuiInvoker, ImGuiInvoker>(Lifestyle.Singleton);
 
         RegisterControls();
