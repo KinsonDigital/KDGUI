@@ -26,7 +26,7 @@ internal static class ImGuiExt
     /// </summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>The converted color.</returns>
-    private static Vector4 ToImGuiColor(this Color value)
+    public static Vector4 ToImGuiColor(this Color value)
     {
         var r = value.R.MapValue(0f, 255f, 0f, 1f);
         var g = value.G.MapValue(0f, 255f, 0f, 1f);
